@@ -1,45 +1,110 @@
 package org.example.list
 
 class SingleLinkedList : CustomList {
-    // don't use any java/kotlin internal datastructures like lists))
-    // write from scratch))
 
+    private class Node(
+        var value: Int,
+        var next: Node? = null
+    )
 
-    override val size: Int
-        get() = TODO("Implement this")
+    private var head: Node? = null
+    private var tail: Node? = null
+
+    override var size: Int = 0
 
     override fun add(element: Int) {
-        TODO("Implement this")
+        val newNode = Node(element)
+        if (head == null) {
+            head = newNode
+            tail = newNode
+        } else {
+            tail?.next = newNode
+            tail = newNode
+        }
+        size++
     }
 
     override operator fun set(index: Int, value: Int) {
-        TODO("Implement this")
+        val node = getNode(index)
+        node.value = value
     }
 
     override fun addFirst(element: Int) {
-        TODO("Implement this")
+        val newNode = Node(element, head)
+        head = newNode
+        if (tail == null) {
+            tail = newNode
+        }
+        size++
     }
 
     override operator fun get(index: Int): Int {
-        TODO("Implement this")
+        return getNode(index).value
+    }
+
+    private fun getNode(index: Int): Node {
+        if (index < 0 || index >= size) {
+            throw IndexOutOfBoundsException("Index: $index, Size: $size")
+        }
+        var current = head
+        for (i in 0 until index) {
+            current = current?.next
+        }
+        return current!!
     }
 
     override fun indexOf(element: Int): Int {
-        TODO("Implement this")
+        var current = head
+        var index = 0
+        while (current != null) {
+            if (current.value == element) {
+                return index
+            }
+            current = current.next
+            index++
+        }
+        return -1
     }
 
     override fun remove(element: Int): Boolean {
-        TODO("Implement this")
+        if (head == null) return false
+
+        if (head?.value == element) {
+            head = head?.next
+            if (head == null) {
+                tail = null
+            }
+            size--
+            return true
+        }
+
+        var current = head
+        while (current?.next != null) {
+            if (current.next?.value == element) {
+                if (current.next == tail) {
+                    tail = current
+                }
+                current.next = current.next?.next
+                size--
+                return true
+            }
+            current = current.next
+        }
+        return false
     }
 
     override fun iterator(): Iterator<Int> {
         return object : Iterator<Int> {
+            private var current = head
+
             override fun hasNext(): Boolean {
-                TODO("Implement this")
+                return current != null
             }
 
             override fun next(): Int {
-                TODO("Implement this")
+                val node = current ?: throw NoSuchElementException()
+                current = node.next
+                return node.value
             }
         }
     }
