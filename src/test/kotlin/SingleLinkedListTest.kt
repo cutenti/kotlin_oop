@@ -85,14 +85,16 @@ class SingleLinkedListTest {
         }
     }
 
+    @Test
     fun `indexOf works`() {
         list.add(10)
         list.add(20)
         list.add(30)
 
-        assertEquals(2, list.indexOf(20))
+        assertEquals(1, list.indexOf(20))
     }
 
+    @Test
     fun `set works`() {
         list.add(10)
         list.add(20)
@@ -100,5 +102,39 @@ class SingleLinkedListTest {
 
         list[2] = 5
         assertEquals(5, list[2])
+    }
+
+    @Test
+    fun `addFirst on empty list initializes list correctly`() {
+        list.addFirst(10)
+
+        assertEquals(1, list.size)
+        assertEquals(10, list[0])
+
+        list.add(20)
+        assertEquals(2, list.size)
+        assertEquals(20, list[1])
+    }
+
+    @Test
+    fun `remove head element updates head pointer correctly`() {
+        list.add(10)
+        list.add(20)
+        list.add(30)
+
+        assertTrue(list.remove(10))
+        assertEquals(2, list.size)
+        assertEquals(20, list[0])
+        assertEquals(30, list[1])
+    }
+
+    @Test
+    fun `singleLinkedListOf creates list with provided elements`() {
+        val createdList = SingleLinkedList.singleLinkedListOf(5, 10, 15)
+
+        assertEquals(3, createdList.size)
+        assertEquals(5, createdList[0])
+        assertEquals(10, createdList[1])
+        assertEquals(15, createdList[2])
     }
 }
